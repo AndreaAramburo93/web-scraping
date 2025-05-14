@@ -8,7 +8,12 @@ urls = [
     "https://www.reddit.com/r/Games/comments/11tjv4i/resident_evil_4_2023_remake_review_thread/.json",
     "https://www.reddit.com/r/patientgamers/comments/rjf9mz/alan_wake_is_a_masterpiece/.json",
     "https://www.reddit.com/r/Games/comments/1lq0ld/outlast_review_thread/.json",
-    #"https://www.reddit.com/r/Games/comments/1fvt8b9/silent_hill_2_review_thread/#:~:text=Faithful%20and%20very%20different%2C%20this,great%20hope%20for%20the%20future."  # <- Agrega más si deseas
+    "https://www.reddit.com/r/patientgamers/comments/1f6bev4/alien_isolation_the_good_the_bad_and_that/.json",
+    "https://www.reddit.com/r/patientgamers/comments/17g54k8/amnesia_rebirth_is_a_remarkable_but_deeply_flawed/.json",
+    "https://www.reddit.com/r/gaming/comments/gyc32/my_honest_review_of_my_first_few_hours_of_amnesia/.json",
+    "https://www.reddit.com/r/HorrorGaming/comments/kv8g4z/visage_any_good/.json",
+    #""https://www.reddit.com/r/Games/comments/1fvt8b9/silent_hill_2_review_thread/#:~:text=Faithful%20and%20very%20di
+    #"""https://www.reddit.com/r/Games/comments/1fvt8b9/silent_hill_2_review_thread/#:~:text=Faithful%20and%20very%20different%2C%20this,great%20hope%20for%20the%20future."  # <- Agrega más si deseas
 ]
 
 headers = {"User-Agent": "Mozilla/5.0"}
@@ -56,7 +61,7 @@ for url in urls:
 
 # --- Exportar todo a un solo Excel ---
 df = pd.DataFrame(comentarios)
-ruta_salida = r"C:/Users/aaram/Documents/5to semestre/DIplomado datos/reddit/reddit_comentarios_consolidados2.xlsx"
+ruta_salida = r"C:/Users/aaram/Documents/5to semestre/webscraping/reddit_comentarios_consolidados2.xlsx"
 df.to_excel(ruta_salida, index=False)
 print(f"✅ Archivo consolidado guardado en: {ruta_salida}")
 

@@ -13,8 +13,8 @@ urls = [
     "https://www.reddit.com/r/Games/comments/1lq0ld/outlast_review_thread/.json",
     "https://www.reddit.com/r/patientgamers/comments/1f6bev4/alien_isolation_the_good_the_bad_and_that/.json",
     "https://www.reddit.com/r/patientgamers/comments/17g54k8/amnesia_rebirth_is_a_remarkable_but_deeply_flawed/.json",
-    "https://www.reddit.com/r/gaming/comments/gyc32/my_honest_review_of_my_first_few_hours_of_amnesia/.json",
-    "https://www.reddit.com/r/HorrorGaming/comments/kv8g4z/visage_any_good/.json"
+    "https://www.reddit.com/r/Games/comments/10lv6tw/dead_space_remake_review_thread/.json",
+    "hhttps://www.reddit.com/r/silenthill/comments/1g8cyaq/silent_hill_2_remake_honest_critical_review_as_a/.json",
 ]
 
 # Diccionario de URL a nombre amigable
@@ -25,8 +25,8 @@ url_a_nombre = {
     urls[3]: "Outlast",
     urls[4]: "Alien Isolation",
     urls[5]: "Amnesia Rebirth",
-    urls[6]: "First Hours of Amnesia",
-    urls[7]: "Visage"
+    urls[6]: "Dead Space Remake",
+    urls[7]: "Silent Hill 2 Remake"
 }
 
 headers = {"User-Agent": "Mozilla/5.0"}
@@ -152,3 +152,12 @@ plt.ylabel('Polaridad del Comentario')
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
+
+
+#¿Cuál es el producto mejor valorado según la polaridad de sus comentarios?
+
+#¿Existe alguna relación entre el número de palabras promedio de los comentarios y la calificación del producto?
+
+#¿Cuál de los productos ha tenido más ventas en la última semana?
+
+#¿Cuál es el lugar de donde más compran cada producto?

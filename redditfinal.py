@@ -65,3 +65,163 @@ ruta_salida = r"C:/Users/aaram/Documents/5to semestre/webscraping/reddit_comenta
 df.to_excel(ruta_salida, index=False)
 print(f"✅ Archivo consolidado guardado en: {ruta_salida}")
 
+#definir data frame Una vez extraída, almacénela en un DataFrame de Pandas.
+
+
+# Crear el DataFrame desde la lista de diccionarios
+df = pd.DataFrame(comentarios)
+
+# Mostrar las primeras filas para verificar
+print(df.head())
+
+
+
+# Convertir columna de fecha a tipo datetime
+df['Fecha UTC'] = pd.to_datetime(df['Fecha UTC'], errors='coerce')
+
+# Asegurar que el puntaje es tipo entero
+df['Puntaje'] = pd.to_numeric(df['Puntaje'], errors='coerce').fillna(0).astype(int)
+
+# Limpiar espacios en strings de columnas de texto
+df['Comentario'] = df['Comentario'].str.strip()
+df['Autor'] = df['Autor'].str.strip()
+
+# Eliminar filas sin comentarios (pueden ser eliminadas o revisadas)
+df = df[df['Comentario'].notnull() & (df['Comentario'] != "")]
+
+# Opción: eliminar duplicados por ID Comentario
+df = df.drop_duplicates(subset='ID Comentario')
+
+# Convertir a minúsculas, quitar caracteres especiales simples
+df['Comentario'] = df['Comentario'].str.lower().str.replace(r'[^\w\s]', '', regex=True)
+
+# Día del comentario (puede servir para gráficos)
+df['Fecha'] = df['Fecha UTC'].dt.date
+
+# Longitud del comentario (útil para histogramas)
+df['Longitud Comentario'] = df['Comentario'].apply(len)
+
+print(df.head())
+print(df.dtypes)
+
+#4.Cree una columna adicional para guardar la polaridad o el sentimiento asociado a cada uno de los comentarios usando la librería TextBlob (Revise el ejemplo de RottenTomatoes).
+   #pip install textblob
+     # python -m textblob.download_corpora
+from textblob import TextBlob
+
+# sentimiento
+def obtener_sentimiento(texto):
+    analisis = TextBlob(texto)
+    polaridad = analisis.sentiment.polarity  # entre -1 (negativo) y 1 (positivo)
+    if polaridad > 0.1:
+        return "Positivo"
+    elif polaridad < -0.1:
+        return "Negativo"
+    else:
+        return "Neutro"
+
+# Aplicar la función a cada comentario
+df['Sentimiento'] = df['Comentario'].apply(obtener_sentimiento)
+
+#5. Cree una columna adicional para contabilizar el número de palabras por cada comentario.
+
+# Contar la cantidad de palabras de cada comentario
+df['Cantidad Palabras'] = df['Comentario'].apply(lambda texto: len(texto.split()))
+
+
+#6. Finalmente, use Matplotlib para comparar la cantidad de calificaciones y reseñas de cada referencia, la distribución de las calificaciones y la polaridad promedio de los comentarios de cada referencia.
+#pip install matplotlib
+
+import matplotlib.pyplot as plt
+from textblob import TextBlob
+
+# Crear columna 'Polaridad' 
+df['Polaridad'] = df['Comentario'].apply(lambda texto: TextBlob(texto).sentiment.polarity)
+
+
+# Agrupar por Post URL y contar comentarios
+cantidad_resenas = df['Post URL'].value_counts()
+
+# Graficar
+
+#rese;as y refernecias
+plt.figure(figsize=(10,6))
+cantidad_resenas.plot(kind='bar', color='skyblue')
+plt.title("Cantidad de Reseñas por Post")
+plt.xlabel("Referencia (Post URL)")
+plt.ylabel("Cantidad de Comentarios")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+#distribucion de puntajes
+plt.figure(figsize=(8,5))
+plt.hist(df['Puntaje'], bins=30, color='orange', edgecolor='black')
+plt.title("Distribución de Calificaciones (Puntajes)")
+plt.xlabel("Puntaje del Comentario")
+plt.ylabel("Cantidad de Comentarios")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+
+#polaridad promedio  > 0.1: Sentimiento positivo. < -0.1: Sentimiento negativo. Entre -0.1 y 0.1: Neutro.
+
+
+# Agrupar por Post URL y obtener polaridad promedio
+
+
+polaridad_promedio = df.groupby('Post URL')['Polaridad'].mean()
+
+# Graficar
+plt.figure(figsize=(10,6))
+polaridad_promedio.plot(kind='bar', color='seagreen')
+plt.title("Polaridad Promedio por Post")
+plt.xlabel("Referencia (Post URL)")
+plt.ylabel("Polaridad Promedio")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+
+#otros graficos de interes
+#pip install seaborn
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=df, x='Post URL', y='Polaridad', palette='coolwarm')
+
+plt.title('Distribución de Polaridad de Comentarios por Post')
+plt.xlabel('Referencia (Post URL)')
+plt.ylabel('Polaridad del Comentario')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(12, 6))
+sns.violinplot(data=df, x='Post URL', y='Polaridad', palette='Set2')
+
+plt.title('Distribución de Sentimiento (Polaridad) por Post')
+plt.xlabel('Referencia (Post URL)')
+plt.ylabel('Polaridad del Comentario')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+#7. Analice el problema y defina qué tipo de gráfico y operaciones son más útiles para analizar este tipo de información.
+
+#preguntas a responder>
+#1. ¿Cuál es el producto mejor valorado según la polaridad de sus comentarios?
+
+#¿Existe alguna relación entre el número de palabras promedio de los comentarios y la calificación del producto?
+
+# ¿Cuál de los productos ha tenido más ventas en la última semana?
+
+#¿Cuál es el lugar de donde más compran cada producto?
